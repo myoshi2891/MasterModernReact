@@ -75,11 +75,32 @@ function Menu() {
 	return (
 		<main className="menu">
 			<h2>Our Menu</h2>
-			<Pizza />
-			<Pizza />
-			<Pizza />
-			<Pizza />
+			<Pizza
+				name="Pizza Margherita"
+				ingredients="Tomato and mozarella"
+				photoName="pizzas/spinaci.jpg"
+				price={10}
+			/>
+			<Pizza
+				name="Pizza Fungi"
+				ingredients="Tomato, mashroom and mozarella"
+				photoName="pizzas/funghi.jpg"
+				price={15}
+			/>
 		</main>
+	);
+}
+
+function Pizza(props) {
+	return (
+		<div className="pizza">
+			<img src={props.photoName} alt={props.name} />
+			<div>
+				<h3>{props.name}</h3>
+				<p>{props.ingredients}</p>
+				<span>{props.price}</span>
+			</div>
+		</div>
 	);
 }
 
@@ -96,15 +117,6 @@ function Footer() {
 	);
 }
 
-function Pizza() {
-	return (
-		<>
-			<img src="pizzas/spinaci.jpg" alt="Prosciutto" />
-			<h3>Pizza Margherita</h3>
-			<p>"Tomato and mozarella"</p>
-		</>
-	);
-}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
