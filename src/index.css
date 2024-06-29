@@ -1,187 +1,99 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+/* 
+const messages = [
+  "Learn React ⚛️",
+  "Apply for jobs 💼",
+  "Invest your new income 🤑",
+];
+ */
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
-html {
-  font-size: 62.5%;
-}
-
 body {
-  font-family: 'Roboto Mono', sans-serif;
-  color: #252525;
-  font-weight: 400;
-  background-color: #f7f2e9;
-  border-bottom: 1.6rem solid #edc84b;
-  min-height: 100vh;
-  padding: 3.2rem;
-  padding-bottom: 6rem;
+  font-family: sans-serif;
+  color: #333;
 }
 
-.container {
-  max-width: 80rem;
-  margin: 0 auto;
+.steps {
+  width: 600px;
+  background-color: #f7f7f7;
+  border-radius: 7px;
+  padding: 25px 100px;
+  margin: 100px auto;
+}
 
+.numbers {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4.8rem;
+  justify-content: space-between;
 }
 
-/* *************** */
-
-.header {
-  align-self: stretch;
-}
-
-.header h1 {
-  /* Non-accessible color */
-  color: #edc84b;
-  /* color: #af8602; */
-
-  text-transform: uppercase;
-  text-align: center;
-  font-size: 5.2rem;
-  font-weight: 300;
-  letter-spacing: 3px;
-  position: relative;
-  width: 100%;
-  display: block;
-}
-
-.header h1::before,
-.header h1::after {
-  display: block;
-  content: '';
-  height: 3px;
-  width: 4rem;
-  background-color: #edc84b;
-  position: absolute;
-  top: calc(50% - 1px);
-}
-
-.header h1::before {
-  left: 0;
-}
-
-.header h1::after {
-  right: 0;
-}
-
-/* *************** */
-
-.menu {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4rem;
-}
-
-.menu h2 {
-  display: inline-block;
-  padding: 1rem 0;
-  border-top: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  font-size: 2.4rem;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  font-weight: 500;
-}
-
-.menu > p {
-  font-size: 1.5rem;
-  text-align: center;
-  line-height: 1.6;
-  width: 80%;
-}
-
-.pizzas {
-  list-style: none;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4.8rem;
-}
-
-.pizza {
-  display: flex;
-  gap: 3.2rem;
-}
-
-.pizza img {
-  width: 12rem;
+.numbers > div {
+  height: 40px;
   aspect-ratio: 1;
-  align-self: start;
-}
-
-.pizza div {
+  background-color: #e7e7e7;
+  border-radius: 50%;
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  padding: 0.4rem 0;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
 }
 
-.pizza h3 {
-  font-size: 2rem;
-  font-weight: 400;
+.numbers .active {
+  background-color: #7950f2;
+  color: #fff;
 }
 
-.pizza p {
-  font-size: 1.4rem;
-  font-weight: 300;
-  font-style: italic;
-  margin-bottom: auto;
-}
+.message {
+  text-align: center;
+  font-size: 20px;
+  margin: 40px 0;
+  font-weight: bold;
 
-.pizza span {
-  display: block;
-  font-size: 1.6rem;
-}
-
-.pizza.sold-out {
-  color: #888;
-}
-
-.pizza.sold-out img {
-  filter: grayscale();
-  opacity: 0.8;
-}
-
-/* *************** */
-
-.footer {
-  font-size: 1.4rem;
-}
-
-.order {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2.4rem;
 }
 
-.btn {
-  color: inherit;
-  font-family: inherit;
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttons button {
   border: none;
-  font-size: 1.4rem;
-  font-weight: 500;
-  background-color: #edc84b;
-  padding: 1.4rem 3.2rem;
   cursor: pointer;
-  transition: all 0.2s;
+  padding: 10px 15px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: bold;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.btn:hover {
-  background-color: #e9bb24;
+.buttons button span {
+  font-size: 16px;
+  line-height: 1;
 }
 
-/*
-SPACING SYSTEM (px)
-2 / 4 / 8 / 12 / 16 / 24 / 32 / 40 / 48 / 64 / 80 / 96 / 128
+h3 {
+  margin: 0;
+  text-transform: uppercase;
+}
 
-FONT SIZE SYSTEM (px)
-10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 /52 / 62 / 74 / 86 / 98
-*/
+.close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 40px;
+  color: inherit;
+}
+
+.close:hover {
+  color: #7950f2;
+}
