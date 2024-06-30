@@ -19,6 +19,16 @@ export default function App() {
 		);
 	}
 
+	function handleClearList() {
+		const confirmed = window.confirm(
+			"Are you sure you want to clear all items?"
+		);
+
+		if (confirmed) {
+			setItems([]);
+		}
+	}
+
 	return (
 		<div className="app">
 			<Logo />
@@ -27,6 +37,7 @@ export default function App() {
 				items={items}
 				onDeleteItem={handleDeleteItem}
 				onToggleItem={handleToggleItem}
+				onClearList={handleClearList}
 			/>
 			<Stats items={items} />
 		</div>
@@ -83,7 +94,7 @@ function Form({ onAddItems }) {
 	);
 }
 
-function PackingList({ items, onDeleteItem, onToggleItem }) {
+function PackingList({ items, onDeleteItem, onToggleItem, onClearList }) {
 	const [sortBy, setSortBy] = useState("input");
 
 	let sortedItems;
@@ -98,34 +109,35 @@ function PackingList({ items, onDeleteItem, onToggleItem }) {
 		sortedItems = items
 			.slice()
 			.sort((a, b) => Number(a.packed) - Number(b.packed));
-		
-		return (
-			<div className="list">
-				<ul>
-					{sortedItems.map((item) => (
-						<Item
-							item={item}
-							onDeleteItem={onDeleteItem}
-							onToggleItem={onToggleItem}
-							key={item.id}
-						/>
-					))}
-				</ul>
 
-				<div className="actions">
-					<select
-						value={sortBy}
-						onChange={(e) => setSortBy(e.target.value)}
-					>
-						<option value="input">Sort by input order</option>
-						<option value="description">
-							Sort by input description
-						</option>
-						<option value="packed">Sort by packed status</option>
-					</select>
-				</div>
+	return (
+		<div className="list">
+			<ul>
+				{sortedItems.map((item) => (
+					<Item
+						item={item}
+						onDeleteItem={onDeleteItem}
+						onToggleItem={onToggleItem}
+						key={item.id}
+					/>
+				))}
+			</ul>
+
+			<div className="actions">
+				<select
+					value={sortBy}
+					onChange={(e) => setSortBy(e.target.value)}
+				>
+					<option value="input">Sort by input order</option>
+					<option value="description">
+						Sort by input description
+					</option>
+					<option value="packed">Sort by packed status</option>
+				</select>
+				<button onClick={onClearList}>Clear List</button>
 			</div>
-		);
+		</div>
+	);
 }
 
 function Item({ item, onDeleteItem, onToggleItem }) {
