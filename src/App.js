@@ -1,227 +1,168 @@
 import { useState } from "react";
 
-const initialFriends = [
-	{
-		id: 118836,
-		name: "Clark",
-		image: "https://i.pravatar.cc/400?u=118836",
-		balance: -7,
-	},
-	{
-		id: 933372,
-		name: "Sarah",
-		image: "https://i.pravatar.cc/400?u=933372",
-		balance: 20,
-	},
-	{
-		id: 499476,
-		name: "Anthony",
-		image: "https://i.pravatar.cc/400?u=499476",
-		balance: 0,
-	},
+const tempMovieData = [
+  {
+    imdbID: "tt1375666",
+    Title: "Inception",
+    Year: "2010",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
+  },
+  {
+    imdbID: "tt0133093",
+    Title: "The Matrix",
+    Year: "1999",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BNzQzOTk3OTAtNDQ0Zi00ZTVkLWI0MTEtMDllZjNkYzNjNTc4L2ltYWdlXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
+  },
+  {
+    imdbID: "tt6751668",
+    Title: "Parasite",
+    Year: "2019",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
+  },
 ];
 
-function Button({ children, onClick }) {
-	return (
-		<button className="button" onClick={onClick}>
-			{children}
-		</button>
-	);
-}
+const tempWatchedData = [
+  {
+    imdbID: "tt1375666",
+    Title: "Inception",
+    Year: "2010",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
+    runtime: 148,
+    imdbRating: 8.8,
+    userRating: 10,
+  },
+  {
+    imdbID: "tt0088763",
+    Title: "Back to the Future",
+    Year: "1985",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
+    runtime: 116,
+    imdbRating: 8.5,
+    userRating: 9,
+  },
+];
+
+const average = (arr) =>
+  arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
 export default function App() {
-	const [friends, setFriends] = useState(initialFriends);
-	const [showAddFriend, setShowAddFriend] = useState(false);
-	const [selectedFriend, setSelectedFriend] = useState(null);
+  const [query, setQuery] = useState("");
+  const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
+  const [isOpen1, setIsOpen1] = useState(true);
+  const [isOpen2, setIsOpen2] = useState(true);
 
-	function handleShowAddFriend() {
-		setShowAddFriend((show) => !show);
-	}
+  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
+  const avgUserRating = average(watched.map((movie) => movie.userRating));
+  const avgRuntime = average(watched.map((movie) => movie.runtime));
 
-	function handleAddFriend(friend) {
-		setFriends((friends) => [...friends, friend]);
-		setShowAddFriend(false);
-	}
+  return (
+    <>
+      <nav className="nav-bar">
+        <div className="logo">
+          <span role="img">🍿</span>
+          <h1>usePopcorn</h1>
+        </div>
+        <input
+          className="search"
+          type="text"
+          placeholder="Search movies..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <p className="num-results">
+          Found <strong>{movies.length}</strong> results
+        </p>
+      </nav>
 
-	function handleSelection(friend) {
-		// setSelectedFriend(friend);
-		setSelectedFriend((cur) => (cur?.id === friend.id ? null : friend));
-		setShowAddFriend(false);
-	}
+      <main className="main">
+        <div className="box">
+          <button
+            className="btn-toggle"
+            onClick={() => setIsOpen1((open) => !open)}
+          >
+            {isOpen1 ? "–" : "+"}
+          </button>
+          {isOpen1 && (
+            <ul className="list">
+              {movies?.map((movie) => (
+                <li key={movie.imdbID}>
+                  <img src={movie.Poster} alt={`${movie.Title} poster`} />
+                  <h3>{movie.Title}</h3>
+                  <div>
+                    <p>
+                      <span>🗓</span>
+                      <span>{movie.Year}</span>
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-	function handleSplitBill(value) {
-		setFriends((friends) =>
-			friends.map((friend) =>
-				friend.id === selectedFriend.id
-					? { ...friend, balance: friend.balance + value }
-					: friend
-			)
-		);
-		setSelectedFriend(null);
-	}
+        <div className="box">
+          <button
+            className="btn-toggle"
+            onClick={() => setIsOpen2((open) => !open)}
+          >
+            {isOpen2 ? "–" : "+"}
+          </button>
+          {isOpen2 && (
+            <>
+              <div className="summary">
+                <h2>Movies you watched</h2>
+                <div>
+                  <p>
+                    <span>#️⃣</span>
+                    <span>{watched.length} movies</span>
+                  </p>
+                  <p>
+                    <span>⭐️</span>
+                    <span>{avgImdbRating}</span>
+                  </p>
+                  <p>
+                    <span>🌟</span>
+                    <span>{avgUserRating}</span>
+                  </p>
+                  <p>
+                    <span>⏳</span>
+                    <span>{avgRuntime} min</span>
+                  </p>
+                </div>
+              </div>
 
-	return (
-		<div className="app">
-			<div className="sidebar">
-				<FriendsList
-					friends={friends}
-					selectedFriend={selectedFriend}
-					onSelection={handleSelection}
-				/>
-
-				{showAddFriend && (
-					<FormAddFriend onAddFriend={handleAddFriend} />
-				)}
-
-				<Button onClick={handleShowAddFriend}>
-					{showAddFriend ? "Close" : "Add Friend"}
-				</Button>
-			</div>
-			{selectedFriend && (
-				<FormSplitBill
-					selectedFriend={selectedFriend}
-					onSplitBill={handleSplitBill}
-				/>
-			)}
-		</div>
-	);
-}
-
-function FriendsList({ friends, onSelection, selectedFriend }) {
-	return (
-		<ul>
-			{friends.map((friend) => (
-				<Friend
-					friend={friend}
-					key={friend.id}
-					onSelection={onSelection}
-					selectedFriend={selectedFriend}
-				/>
-			))}
-		</ul>
-	);
-}
-
-function Friend({ friend, onSelection, selectedFriend }) {
-	const isSelected = selectedFriend?.id === friend.id;
-	return (
-		<li className={isSelected ? "selected" : ""}>
-			<img src={friend.image} alt={friend.name} />
-			<h3>{friend.name}</h3>
-			{friend.balance < 0 && (
-				<p className="red">
-					You owe {friend.name} {Math.abs(friend.balance)}€
-				</p>
-			)}
-			{friend.balance > 0 && (
-				<p className="green">
-					{friend.name} owes you {Math.abs(friend.balance)}€
-				</p>
-			)}
-			{friend.balance === 0 && <p>You and {friend.name} are even. 🤟</p>}
-
-			<Button onClick={() => onSelection(friend)}>
-				{isSelected ? "Close" : "Select"}
-			</Button>
-		</li>
-	);
-}
-
-function FormAddFriend({ onAddFriend }) {
-	const [name, setName] = useState("");
-	const [image, setImage] = useState("https://i.pravatar.cc/400");
-
-	function handleSubmit(e) {
-		e.preventDefault();
-
-		if (!name || !image) return;
-
-		const id = crypto.randomUUID();
-		const newFriend = {
-			id,
-			name,
-			image: `${image}?=${id}`,
-			balance: 0,
-		};
-
-		onAddFriend(newFriend);
-
-		setName("");
-		setImage("https://i.pravatar.cc/400");
-	}
-
-	return (
-		<form className="form-add-friend" onSubmit={handleSubmit}>
-			<label>🤷‍♂️ Friend name</label>
-			<input
-				type="text"
-				value={name}
-				onChange={(e) => setName(e.target.value)}
-			/>
-
-			<label>🌆 Image URL</label>
-			<input
-				type="text"
-				value={image}
-				onChange={(e) => setImage(e.target.value)}
-			/>
-
-			<Button>Submit</Button>
-		</form>
-	);
-}
-
-function FormSplitBill({ selectedFriend, onSplitBill }) {
-	const [bill, setbill] = useState("");
-	const [paidByUser, setPaidByUser] = useState("");
-	const paidByFriend = bill ? bill - paidByUser : "";
-	const [whoIsPaying, setWhoIsPaying] = useState("user");
-
-	function handleSubmit(e) {
-		e.preventDefault();
-
-		if (!bill || !paidByUser) return;
-
-		onSplitBill(whoIsPaying === "user" ? paidByFriend : -paidByUser);
-	}
-
-	return (
-		<form className="form-split-bill" onSubmit={handleSubmit}>
-			<h2>Split a bill with {selectedFriend.name}</h2>
-
-			<label>💸 Bill value</label>
-			<input
-				type="text"
-				value={bill}
-				onChange={(e) => setbill(Number(e.target.value))}
-			/>
-
-			<label>💰 Your expence</label>
-			<input
-				type="text"
-				value={paidByUser}
-				onChange={(e) =>
-					setPaidByUser(
-						Number(e.target.value) > bill
-							? paidByUser
-							: Number(e.target.value)
-					)
-				}
-			/>
-
-			<label>👨🏻‍🤝‍👨🏼 {selectedFriend.name}'s expense</label>
-			<input type="text" disabled value={paidByFriend} />
-
-			<label>🤑 Who is paying the bill</label>
-			<select
-				value={whoIsPaying}
-				onChange={(e) => setWhoIsPaying(e.target.value)}
-			>
-				<option value="user">You</option>
-				<option value="friend">{selectedFriend.name}</option>
-			</select>
-
-			<Button>Split bill</Button>
-		</form>
-	);
+              <ul className="list">
+                {watched.map((movie) => (
+                  <li key={movie.imdbID}>
+                    <img src={movie.Poster} alt={`${movie.Title} poster`} />
+                    <h3>{movie.Title}</h3>
+                    <div>
+                      <p>
+                        <span>⭐️</span>
+                        <span>{movie.imdbRating}</span>
+                      </p>
+                      <p>
+                        <span>🌟</span>
+                        <span>{movie.userRating}</span>
+                      </p>
+                      <p>
+                        <span>⏳</span>
+                        <span>{movie.runtime} min</span>
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+      </main>
+    </>
+  );
 }
