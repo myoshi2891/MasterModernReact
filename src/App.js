@@ -81,6 +81,7 @@ export default function App() {
 				<FormSplitBill
 					selectedFriend={selectedFriend}
 					onSplitBill={handleSplitBill}
+					key={selectedFriend.id}
 				/>
 			)}
 		</div>
@@ -99,8 +100,7 @@ function FriendsList({ friends, onSelection, selectedFriend }) {
 				/>
 			))}
 		</ul>
-	);
-}
+)}
 
 function Friend({ friend, onSelection, selectedFriend }) {
 	const isSelected = selectedFriend?.id === friend.id;
