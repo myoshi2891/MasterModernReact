@@ -27,68 +27,86 @@ export default function App() {
 }
 
 function Tabbed({ content }) {
-  const [activeTab, setActiveTab] = useState(0);
+	const [activeTab, setActiveTab] = useState(0);
 
-  return (
-    <div>
-      <div className="tabs">
-        <Tab num={0} activeTab={activeTab} onClick={setActiveTab} />
-        <Tab num={1} activeTab={activeTab} onClick={setActiveTab} />
-        <Tab num={2} activeTab={activeTab} onClick={setActiveTab} />
-        <Tab num={3} activeTab={activeTab} onClick={setActiveTab} />
-      </div>
+	return (
+		<div>
+			<div className="tabs">
+				<Tab num={0} activeTab={activeTab} onClick={setActiveTab} />
+				<Tab num={1} activeTab={activeTab} onClick={setActiveTab} />
+				<Tab num={2} activeTab={activeTab} onClick={setActiveTab} />
+				<Tab num={3} activeTab={activeTab} onClick={setActiveTab} />
+			</div>
 
-      {activeTab <= 2 ? (
-        <TabContent item={content.at(activeTab)} />
-      ) : (
-        <DifferentContent />
-      )}
-    </div>
-  );
+			{activeTab <= 2 ? (
+				<TabContent
+					item={content.at(activeTab)}
+					key={content.at(activeTab).summary}
+				/>
+			) : (
+				<DifferentContent />
+			)}
+		</div>
+	);
 }
 
 function Tab({ num, activeTab, onClick }) {
-  return (
-    <button
-      className={activeTab === num ? "tab active" : "tab"}
-      onClick={() => onClick(num)}
-    >
-      Tab {num + 1}
-    </button>
-  );
+	return (
+		<button
+			className={activeTab === num ? "tab active" : "tab"}
+			onClick={() => onClick(num)}
+		>
+			Tab {num + 1}
+		</button>
+	);
 }
 
 function TabContent({ item }) {
-  const [showDetails, setShowDetails] = useState(true);
-  const [likes, setLikes] = useState(0);
+	const [showDetails, setShowDetails] = useState(true);
+	const [likes, setLikes] = useState(0);
 
-  function handleInc() {
-    setLikes(likes + 1);
-  }
+	function handleInc() {
+		setLikes(likes + 1);
+	}
 
-  return (
-    <div className="tab-content">
-      <h4>{item.summary}</h4>
-      {showDetails && <p>{item.details}</p>}
+	function handleTripleInc() {
+		setLikes((likes) => likes + 1);
+		setLikes((likes) => likes + 1);
+		setLikes((likes) => likes + 1);
+	}
 
-      <div className="tab-actions">
-        <button onClick={() => setShowDetails((h) => !h)}>
-          {showDetails ? "Hide" : "Show"} details
-        </button>
+	function handleUndo() {
+		setShowDetails(true);
+		setLikes(0);
+	}
 
-        <div className="hearts-counter">
-          <span>{likes} ❤️</span>
-          <button onClick={handleInc}>+</button>
-          <button>+++</button>
-        </div>
-      </div>
+	function handleUndoLater() {
+		setTimeout(handleUndo, 2000);
+	}
 
-      <div className="tab-undo">
-        <button>Undo</button>
-        <button>Undo in 2s</button>
-      </div>
-    </div>
-  );
+	return (
+		<div className="tab-content">
+			<h4>{item.summary}</h4>
+			{showDetails && <p>{item.details}</p>}
+
+			<div className="tab-actions">
+				<button onClick={() => setShowDetails((h) => !h)}>
+					{showDetails ? "Hide" : "Show"} details
+				</button>
+
+				<div className="hearts-counter">
+					<span>{likes} ❤️</span>
+					<button onClick={handleInc}>+</button>
+					<button onClick={handleTripleInc}>+++</button>
+				</div>
+			</div>
+
+			<div className="tab-undo">
+				<button onClick={handleUndo}>Undo</button>
+				<button onClick={handleUndoLater}>Undo in 2s</button>
+			</div>
+		</div>
+	);
 }
 
 function DifferentContent() {
