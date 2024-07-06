@@ -44,19 +44,39 @@ const tempWatchedData = [
 
 const average = (arr) =>
 	arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
-	
-	const KEY = "36cc68ac";
-	export default function App() {
-		const [movies, setMovies] = useState([]);
-		const [watched, setWatched] = useState([]);
-		const [isLoading, setIsLoading] = useState(false);
-		const [error, setError] = useState("");
-		const query = "interstellarwwww";
+const KEY = process.env.REACT_APP_KEY;
 
-		useEffect(function () {
+export default function App() {
+	const [query, setQuery] = useState("inception");
+	const [movies, setMovies] = useState([]);
+	const [watched, setWatched] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState("");
+	const tempQuery = "interstellar";
+
+	// useEffect(function () {
+	// 	console.log("After initail render");
+	// }, []);
+
+	// useEffect(function () {
+	// 	console.log("After everry render");
+	// });
+
+	// useEffect(
+	// 	function () {
+	// 		console.log("D");
+	// 	},
+	// 	[query]
+	// );
+
+	// console.log("During Render");
+
+	useEffect(
+		function () {
 			async function fetchMovies() {
 				try {
 					setIsLoading(true);
+					setError("");
 					const res = await fetch(
 						`https://www.omdbapi.com/?s=${query}&apikey=${KEY}`
 					);
@@ -72,24 +92,31 @@ const average = (arr) =>
 
 					setMovies(data.Search);
 				} catch (err) {
-					console.error(err);
 					setError(err.message);
 				} finally {
 					setIsLoading(false);
 				}
 			}
+
+			if (query.length < 3) {
+				setMovies([]);
+				setError("");
+				return;
+			}
 			fetchMovies();
-		}, []);
+		},
+		[query]
+	);
 
-		return (
-			<>
-				<NavBar>
-					<Search />
-					<NumResults movies={movies} />
-				</NavBar>
+	return (
+		<>
+			<NavBar>
+				<Search query={query} setQuery={setQuery} />
+				<NumResults movies={movies} />
+			</NavBar>
 
-				<Main>
-					{/* <Box element={<MovieList movies={movies} />} />
+			<Main>
+				{/* <Box element={<MovieList movies={movies} />} />
 				<Box
 					element={
 						<>
@@ -98,33 +125,33 @@ const average = (arr) =>
 						</>
 					}
 				/> */}
-					<Box>
-						{/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
-						{isLoading && <Loader />}
-						{!isLoading && !error && <MovieList movies={movies} />}
-						{error && <ErrorMessage message={error} />}
-					</Box>
-					<Box>
-						<WatchedSummary watched={watched} />
-						<WatchedMovieList watched={watched} />
-					</Box>
-				</Main>
-			</>
-		);
-	}
+				<Box>
+					{/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
+					{isLoading && <Loader />}
+					{!isLoading && !error && <MovieList movies={movies} />}
+					{error && <ErrorMessage message={error} />}
+				</Box>
+				<Box>
+					<WatchedSummary watched={watched} />
+					<WatchedMovieList watched={watched} />
+				</Box>
+			</Main>
+		</>
+	);
+}
 
-	function Loader() {
-		return <p className="loader">Loading...</p>;
-	}
+function Loader() {
+	return <p className="loader">Loading...</p>;
+}
 
-	function ErrorMessage({ message }) {
-		return (
-			<p className="error">
-				<span>🤬</span>
-				{message}
-			</p>
-		);
-	}
+function ErrorMessage({ message }) {
+	return (
+		<p className="error">
+			<span>🤬</span>
+			{message}
+		</p>
+	);
+}
 
 function NavBar({ children }) {
 	return (
@@ -144,9 +171,7 @@ function Logo() {
 	);
 }
 
-function Search() {
-	const [query, setQuery] = useState("");
-
+function Search({ query, setQuery }) {
 	return (
 		<input
 			className="search"
